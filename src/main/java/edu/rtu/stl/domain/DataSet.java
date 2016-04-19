@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class DataSet {
 
-    public final Map<String, Integer>[] wordCounts = new Map[Sentiment.values().length];
+    private final Map<String, Integer>[] wordCounts = new Map[Sentiment.values().length];
     {
         for (int i = 0; i < Sentiment.values().length; i++) {
             wordCounts[i] = new HashMap<>();
