@@ -8,3 +8,4 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 tweet-analyzer.iml
+src/main/resources/twitter_test_data_big_.csv.zip
