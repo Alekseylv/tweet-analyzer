@@ -4,6 +4,7 @@ import static edu.rtu.stl.domain.Sentiment.fromValue;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ public class TwitterParser implements Parser {
             }
             String[] parsedLine = lineItems.toArray(new String[lineItems.size()]);
             if (parsedLine.length < 6) {
+                System.out.println(Arrays.asList(parsedLine));
                 continue;
             }
             Sentiment sentiment = fromValue(parsedLine[0]);
