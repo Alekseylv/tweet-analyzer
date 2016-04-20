@@ -6,18 +6,18 @@ import edu.rtu.stl.domain.BayesDataSet;
 import edu.rtu.stl.domain.Sentiment;
 import edu.rtu.stl.parser.Tokenizer;
 
-public class BernulliNaiveBayesClassifier extends MultinomialNaiveBayesClassifier {
+public class BernulliNaiveBayesClassifier extends NaiveBayesClassifier {
 
     public BernulliNaiveBayesClassifier(BayesDataSet dataSet, Tokenizer tokenizer) {
         super(dataSet, tokenizer);
     }
 
     @Override
-    public double incrementScore(Sentiment sentiment, String key) {
+    double incrementScore(Sentiment sentiment, String key) {
         if (dataSet.getFrequencies(sentiment).containsKey(key)) {
             return log(dataSet.bernulliTermProbability(sentiment, key));
-        } else {
-            return log(1 - dataSet.bernulliTermProbability(sentiment, key));
         }
+
+        return log(1 - dataSet.bernulliTermProbability(sentiment, key));
     }
 }
