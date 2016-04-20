@@ -15,7 +15,6 @@ public enum Sentiment {
                 return sentiment;
             }
         }
-        System.out.println(value);
-        throw new IllegalArgumentException("Not a valid value");
+        throw new IllegalArgumentException("Not a valid Sentiment value: " + value);
     }
 }

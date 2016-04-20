@@ -8,10 +8,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.rtu.stl.domain.DataSet;
 import edu.rtu.stl.domain.Sentiment;
 
 public class TwitterParser implements Parser {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TwitterParser.class);
 
     @Override
     public DataSet parse(List<String> lines) throws IOException {
@@ -27,7 +32,7 @@ public class TwitterParser implements Parser {
             }
             String[] parsedLine = lineItems.toArray(new String[lineItems.size()]);
             if (parsedLine.length < 6) {
-                System.out.println(Arrays.asList(parsedLine));
+                LOG.error("Invalid line detected at {}. Parsed line: {}", count, Arrays.asList(parsedLine));
                 continue;
             }
             Sentiment sentiment = fromValue(parsedLine[0]);
@@ -39,7 +44,7 @@ public class TwitterParser implements Parser {
                 }
             }
             if (count % 1000 == 0) {
-                System.out.println(count);
+                LOG.debug("Count {}", count);
             }
         }
         return dataSet;
