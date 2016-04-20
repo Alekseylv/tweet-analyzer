@@ -13,7 +13,7 @@ import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.FileHeader;
 
-public class ZipFileReader {
+public class ZipFileReader implements FileReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(ZipFileReader.class);
 
@@ -31,6 +31,7 @@ public class ZipFileReader {
             }
             return result;
         } catch (ZipException e) {
+            LOG.error("Failed to unzip file {}. {}", path, e);
             return Collections.emptyList();
         }
     }
