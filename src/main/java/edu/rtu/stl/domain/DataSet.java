@@ -44,7 +44,7 @@ public class DataSet {
     }
 
     public int distinctTermCount() {
-        return total.frequencies.keySet().size();
+        return total.frequencies.size();
     }
 
     public void incrementDocumentCount(Sentiment sentiment) {

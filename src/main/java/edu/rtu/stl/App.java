@@ -15,8 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.rtu.stl.analyzer.BayesAnalyzer;
+import edu.rtu.stl.analyzer.BernulliBayesAnalyzer;
+import edu.rtu.stl.classifier.BernulliNaiveBayesClassifier;
 import edu.rtu.stl.classifier.Classifier.Result;
-import edu.rtu.stl.classifier.NaiveBayes;
+import edu.rtu.stl.classifier.MultinomialNaiveBayesClassifier;
 import edu.rtu.stl.domain.Document;
 import edu.rtu.stl.io.AllFileReader;
 import edu.rtu.stl.io.FileReader;
@@ -38,24 +40,21 @@ public class App {
 
         Tokenizer tokenizer = new Tokenizer(stopWords);
         Parser parser = new TwitterCSVParser();
-        BayesAnalyzer bayesAnalyzer = new BayesAnalyzer(tokenizer);
+        BayesAnalyzer bayesAnalyzer = new BernulliBayesAnalyzer(tokenizer);
         PrecisionRecallReportGenerator reportGenerator = new PrecisionRecallReportGenerator();
 
         Path learningDataPath = Paths.get("src", "main", "resources", "twitter_test_data_big_.csv.zip");
-        NaiveBayes naiveBayes = new NaiveBayes(bayesAnalyzer.analyze(parser.parse(fileReader.readLines(learningDataPath))), tokenizer);
+        BernulliNaiveBayesClassifier naiveBayes = new BernulliNaiveBayesClassifier(bayesAnalyzer.analyze(parser.parse(fileReader.readLines(learningDataPath))), tokenizer);
 
 
         Path testingDataPath = Paths.get("src", "main", "resources", "twitter_test_data_small.csv");
         List<Document> testingDocuments = parser.parse(fileReader.readLines(testingDataPath));
-        List<Result> classificationResults = testingDocuments.stream().map(naiveBayes::classify).collect(Collectors.toList());
+        List<Result> classificationResults = testingDocuments.stream().filter(x -> x.sentiment != NEUTRAL)
+                .map(naiveBayes::classify).collect(Collectors.toList());
 
         LOG.info(reportGenerator.generateFor(POSITIVE, classificationResults).toString());
         LOG.info(reportGenerator.generateFor(NEGATIVE, classificationResults).toString());
         LOG.info(reportGenerator.generateFor(NEUTRAL, classificationResults).toString());
-    }
-
-    private static <T> List<T> subList(List<T> list, int n) {
-        return list.subList(0, list.size() >= n ? 50 : list.size());
     }
 
 }

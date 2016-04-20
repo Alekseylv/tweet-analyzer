@@ -9,12 +9,12 @@ import edu.rtu.stl.domain.Document;
 import edu.rtu.stl.domain.Sentiment;
 import edu.rtu.stl.parser.Tokenizer;
 
-public class NaiveBayes implements Classifier {
+public class MultinomialNaiveBayesClassifier implements Classifier {
 
     public final BayesDataSet dataSet;
     public final Tokenizer tokenizer;
 
-    public NaiveBayes(BayesDataSet dataSet, Tokenizer tokenizer) {
+    public MultinomialNaiveBayesClassifier(BayesDataSet dataSet, Tokenizer tokenizer) {
         this.dataSet = dataSet;
         this.tokenizer = tokenizer;
     }
@@ -28,7 +28,7 @@ public class NaiveBayes implements Classifier {
             Sentiment sentiment = Sentiment.values()[i];
             score[i] = log(dataSet.sentimentProbability(sentiment));
             for (String token : tokens) {
-                score[i] += log(dataSet.termProbability(sentiment, token));
+                score[i] += incrementScore(sentiment, token);
             }
         }
 
@@ -39,6 +39,10 @@ public class NaiveBayes implements Classifier {
             }
         }
         return max;
+    }
+
+    public double incrementScore(Sentiment sentiment, String key) {
+        return log(dataSet.multinomialTermProbability(sentiment, key));
     }
 
 }
