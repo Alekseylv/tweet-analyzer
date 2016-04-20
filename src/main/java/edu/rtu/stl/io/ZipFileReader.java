@@ -1,4 +1,4 @@
-package edu.rtu.stl.parser;
+package edu.rtu.stl.io;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -34,5 +34,11 @@ public class ZipFileReader implements FileReader {
             LOG.error("Failed to unzip file {}. {}", path, e);
             return Collections.emptyList();
         }
+    }
+
+    @Override
+    public boolean matches(Path path) {
+        String name = path.toFile().getName();
+        return name.endsWith(".zip");
     }
 }

@@ -1,4 +1,4 @@
-package edu.rtu.stl.parser;
+package edu.rtu.stl.io;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,5 +21,11 @@ public class BasicFileReader implements FileReader {
             LOG.error("Failed to read file {}. {}", path, e);
             return Collections.emptyList();
         }
+    }
+
+    @Override
+    public boolean matches(Path path) {
+        String name = path.toFile().getName();
+        return name.endsWith(".txt") || name.endsWith(".csv");
     }
 }
