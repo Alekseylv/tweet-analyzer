@@ -1,29 +1,24 @@
 package edu.rtu.stl.domain;
 
-import static java.math.RoundingMode.HALF_EVEN;
-
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 public class BayesDataSet {
 
     private final DataSet dataSet;
-    private final Map<String, BigDecimal>[] termProbabilities = new Map[Sentiment.values().length];
-    private final BigDecimal[] zeroTermProbability = new BigDecimal[Sentiment.values().length];
+    private final Map<String, Double>[] termProbabilities = new Map[Sentiment.values().length];
+    private final double[] zeroTermProbability = new double[Sentiment.values().length];
 
-    {
+    public BayesDataSet(DataSet dataSet) {
+        this.dataSet = dataSet;
+
         for (int i = 0; i < Sentiment.values().length; i++) {
             termProbabilities[i] = new HashMap<>();
             zeroTermProbability[i] = probability(Sentiment.values()[i], 0);
         }
     }
 
-    public BayesDataSet(DataSet dataSet) {
-        this.dataSet = dataSet;
-    }
-
-    public BigDecimal termProbability(Sentiment sentiment, String key) {
+    public double termProbability(Sentiment sentiment, String key) {
         if (termProbabilities[sentiment.ordinal()].containsKey(key)) {
             return termProbabilities[sentiment.ordinal()].get(key);
         }
@@ -34,17 +29,20 @@ public class BayesDataSet {
 
         int termFrequencyInSentiment = dataSet.getFrequencies(sentiment).get(key);
 
-        BigDecimal probability = probability(sentiment, termFrequencyInSentiment);
+        double probability = probability(sentiment, termFrequencyInSentiment);
         termProbabilities[sentiment.ordinal()].put(key, probability);
         return probability;
     }
 
+    public double sentimentProbablity(Sentiment sentiment) {
+        return dataSet.getDocumentCount(sentiment) / (double) (dataSet.getDocumentCount());
+    }
 
-    private BigDecimal probability(Sentiment sentiment, int termFrequencyInSentiment) {
+    private double probability(Sentiment sentiment, int termFrequencyInSentiment) {
         int totalTermCountInSentiment = dataSet.getTotalTerms(sentiment);
         int distinctTermCount = dataSet.distinctTermCount();
 
-       return new BigDecimal(termFrequencyInSentiment + 1).divide(new BigDecimal(totalTermCountInSentiment + distinctTermCount), HALF_EVEN);
+        return termFrequencyInSentiment + 1 /  (double) (totalTermCountInSentiment + distinctTermCount);
     }
 
 }
