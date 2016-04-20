@@ -1,5 +1,9 @@
 package edu.rtu.stl;
 
+import static edu.rtu.stl.domain.Sentiment.NEGATIVE;
+import static edu.rtu.stl.domain.Sentiment.NEUTRAL;
+import static edu.rtu.stl.domain.Sentiment.POSITIVE;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,14 +15,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.rtu.stl.analyzer.BayesAnalyzer;
+import edu.rtu.stl.classifier.Classifier.Result;
 import edu.rtu.stl.classifier.NaiveBayes;
-import edu.rtu.stl.domain.BayesDataSet;
-import edu.rtu.stl.domain.DataSet;
+import edu.rtu.stl.domain.Document;
 import edu.rtu.stl.io.AllFileReader;
 import edu.rtu.stl.io.FileReader;
 import edu.rtu.stl.parser.Parser;
 import edu.rtu.stl.parser.Tokenizer;
 import edu.rtu.stl.parser.TwitterCSVParser;
+import edu.rtu.stl.report.PrecisionRecallReportGenerator;
 
 public class App {
 
@@ -34,19 +39,19 @@ public class App {
         Tokenizer tokenizer = new Tokenizer(stopWords);
         Parser parser = new TwitterCSVParser();
         BayesAnalyzer bayesAnalyzer = new BayesAnalyzer(tokenizer);
+        PrecisionRecallReportGenerator reportGenerator = new PrecisionRecallReportGenerator();
 
-        Path dataPath = Paths.get("src", "main", "resources", "twitter_test_data_big_.csv.zip");
-        BayesDataSet bayesDataSet = bayesAnalyzer.analyze(parser.parse(fileReader.readLines(dataPath)));
-        NaiveBayes naiveBayes = new NaiveBayes(bayesDataSet, tokenizer);
+        Path learningDataPath = Paths.get("src", "main", "resources", "twitter_test_data_big_.csv.zip");
+        NaiveBayes naiveBayes = new NaiveBayes(bayesAnalyzer.analyze(parser.parse(fileReader.readLines(learningDataPath))), tokenizer);
 
-        LOG.info(naiveBayes.classify("@sketchbug Lebron is a hometown hero to me, lol I love the Lakers but let's go Cavs, lol").toString());
-        //        for (int i = 0; i < Sentiment.values().length; i++) {
-        //            Sentiment sentiment = Sentiment.values()[i];
-        //            LOG.info(sentiment.name());
-        //            List<Entry<String, Integer>> entries = new ArrayList<>(dataSet.getFrequencies(sentiment).entrySet());
-        //            Collections.sort(entries, (x, y) -> -x.getValue().compareTo(y.getValue()));
-        //            LOG.info(subList(entries, 50).toString());
-        //        }
+
+        Path testingDataPath = Paths.get("src", "main", "resources", "twitter_test_data_small.csv");
+        List<Document> testingDocuments = parser.parse(fileReader.readLines(testingDataPath));
+        List<Result> classificationResults = testingDocuments.stream().map(naiveBayes::classify).collect(Collectors.toList());
+
+        LOG.info(reportGenerator.generateFor(POSITIVE, classificationResults).toString());
+        LOG.info(reportGenerator.generateFor(NEGATIVE, classificationResults).toString());
+        LOG.info(reportGenerator.generateFor(NEUTRAL, classificationResults).toString());
     }
 
     private static <T> List<T> subList(List<T> list, int n) {
