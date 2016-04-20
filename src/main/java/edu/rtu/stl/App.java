@@ -18,7 +18,6 @@ import edu.rtu.stl.analyzer.BayesAnalyzer;
 import edu.rtu.stl.analyzer.BernulliBayesAnalyzer;
 import edu.rtu.stl.classifier.BernulliNaiveBayesClassifier;
 import edu.rtu.stl.classifier.Classifier.Result;
-import edu.rtu.stl.classifier.MultinomialNaiveBayesClassifier;
 import edu.rtu.stl.domain.Document;
 import edu.rtu.stl.io.AllFileReader;
 import edu.rtu.stl.io.FileReader;
@@ -44,8 +43,8 @@ public class App {
         PrecisionRecallReportGenerator reportGenerator = new PrecisionRecallReportGenerator();
 
         Path learningDataPath = Paths.get("src", "main", "resources", "twitter_test_data_big_.csv.zip");
-        BernulliNaiveBayesClassifier naiveBayes = new BernulliNaiveBayesClassifier(bayesAnalyzer.analyze(parser.parse(fileReader.readLines(learningDataPath))), tokenizer);
-
+        BernulliNaiveBayesClassifier naiveBayes = new BernulliNaiveBayesClassifier(
+                bayesAnalyzer.analyze(parser.parse(fileReader.readLines(learningDataPath))), tokenizer);
 
         Path testingDataPath = Paths.get("src", "main", "resources", "twitter_test_data_small.csv");
         List<Document> testingDocuments = parser.parse(fileReader.readLines(testingDataPath));
