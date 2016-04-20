@@ -3,18 +3,14 @@ package edu.rtu.stl.domain;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BayesDataSet {
+public class BayesDataSet extends DataSet {
 
-    private final DataSet dataSet;
     private final Map<String, Double>[] termProbabilities = new Map[Sentiment.values().length];
-    private final double[] zeroTermProbability = new double[Sentiment.values().length];
 
-    public BayesDataSet(DataSet dataSet) {
-        this.dataSet = dataSet;
+    public BayesDataSet() {
 
         for (int i = 0; i < Sentiment.values().length; i++) {
             termProbabilities[i] = new HashMap<>();
-            zeroTermProbability[i] = probability(Sentiment.values()[i], 0);
         }
     }
 
@@ -23,24 +19,24 @@ public class BayesDataSet {
             return termProbabilities[sentiment.ordinal()].get(key);
         }
 
-        if (!dataSet.getFrequencies(sentiment).containsKey(key)) {
-            return zeroTermProbability[sentiment.ordinal()];
+        if (!getFrequencies(sentiment).containsKey(key)) {
+            return probability(sentiment, 0);
         }
 
-        int termFrequencyInSentiment = dataSet.getFrequencies(sentiment).get(key);
+        int termFrequencyInSentiment = getFrequencies(sentiment).get(key);
 
         double probability = probability(sentiment, termFrequencyInSentiment);
         termProbabilities[sentiment.ordinal()].put(key, probability);
         return probability;
     }
 
-    public double sentimentProbablity(Sentiment sentiment) {
-        return dataSet.getDocumentCount(sentiment) / (double) (dataSet.getDocumentCount());
+    public double sentimentProbability(Sentiment sentiment) {
+        return getDocumentCount(sentiment) / (double) (getDocumentCount());
     }
 
     private double probability(Sentiment sentiment, int termFrequencyInSentiment) {
-        int totalTermCountInSentiment = dataSet.getTotalTerms(sentiment);
-        int distinctTermCount = dataSet.distinctTermCount();
+        int totalTermCountInSentiment = getTotalTerms(sentiment);
+        int distinctTermCount = distinctTermCount();
 
         return termFrequencyInSentiment + 1 /  (double) (totalTermCountInSentiment + distinctTermCount);
     }

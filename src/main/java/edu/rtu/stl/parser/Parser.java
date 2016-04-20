@@ -1,10 +1,9 @@
 package edu.rtu.stl.parser;
 
-import java.io.IOException;
 import java.util.List;
 
-import edu.rtu.stl.domain.DataSet;
+import edu.rtu.stl.domain.Document;
 
 public interface Parser {
-    DataSet parse(List<String> lines) throws IOException;
+    List<Document> parse(List<String> lines);
 }

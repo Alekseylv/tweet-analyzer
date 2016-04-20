@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.rtu.stl.analyzer.BayesAnalyzer;
 import edu.rtu.stl.classifier.NaiveBayes;
 import edu.rtu.stl.domain.BayesDataSet;
 import edu.rtu.stl.domain.DataSet;
@@ -17,7 +18,7 @@ import edu.rtu.stl.io.AllFileReader;
 import edu.rtu.stl.io.FileReader;
 import edu.rtu.stl.parser.Parser;
 import edu.rtu.stl.parser.Tokenizer;
-import edu.rtu.stl.parser.TwitterParser;
+import edu.rtu.stl.parser.TwitterCSVParser;
 
 public class App {
 
@@ -31,14 +32,14 @@ public class App {
                 x.replaceAll("[^a-zA-Z ]", "").toLowerCase()).collect(Collectors.toSet());
 
         Tokenizer tokenizer = new Tokenizer(stopWords);
-        Parser parser = new TwitterParser(tokenizer);
+        Parser parser = new TwitterCSVParser();
+        BayesAnalyzer bayesAnalyzer = new BayesAnalyzer(tokenizer);
 
         Path dataPath = Paths.get("src", "main", "resources", "twitter_test_data_big_.csv.zip");
-        DataSet dataSet = parser.parse(fileReader.readLines(dataPath));
-        BayesDataSet bayesDataSet = new BayesDataSet(dataSet);
+        BayesDataSet bayesDataSet = bayesAnalyzer.analyze(parser.parse(fileReader.readLines(dataPath)));
         NaiveBayes naiveBayes = new NaiveBayes(bayesDataSet, tokenizer);
 
-        System.out.println(naiveBayes.classify("@sketchbug Lebron is a hometown hero to me, lol I love the Lakers but let's go Cavs, lol"));
+        LOG.info(naiveBayes.classify("@sketchbug Lebron is a hometown hero to me, lol I love the Lakers but let's go Cavs, lol").toString());
         //        for (int i = 0; i < Sentiment.values().length; i++) {
         //            Sentiment sentiment = Sentiment.values()[i];
         //            LOG.info(sentiment.name());

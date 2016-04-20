@@ -25,7 +25,7 @@ public class NaiveBayes implements Classifier {
 
         for (int i = 0; i < Sentiment.values().length; i++) {
             Sentiment sentiment = Sentiment.values()[i];
-            score[i] = log(dataSet.sentimentProbablity(sentiment));
+            score[i] = log(dataSet.sentimentProbability(sentiment));
             for (String token : tokens) {
                 score[i] += log(dataSet.termProbability(sentiment, token));
             }

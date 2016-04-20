@@ -2,30 +2,21 @@ package edu.rtu.stl.parser;
 
 import static edu.rtu.stl.domain.Sentiment.fromValue;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.rtu.stl.domain.DataSet;
-import edu.rtu.stl.domain.Sentiment;
+import edu.rtu.stl.domain.Document;
 
-public class TwitterParser implements Parser {
+public class TwitterCSVParser implements Parser {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TwitterParser.class);
-
-    public final Tokenizer tokenizer;
-
-    public TwitterParser(Tokenizer tokenizer) {
-        this.tokenizer = tokenizer;
-    }
+    private static final Logger LOG = LoggerFactory.getLogger(TwitterCSVParser.class);
 
     @Override
-    public DataSet parse(List<String> lines) throws IOException {
-        DataSet dataSet = new DataSet();
+    public List<Document> parse(List<String> lines) {
+        List<Document> result = new ArrayList<>(lines.size());
         int count = 0;
         for (String line : lines) {
             count++;
@@ -40,16 +31,13 @@ public class TwitterParser implements Parser {
                 LOG.error("Invalid line detected at {}. Line: {}", count, line);
                 continue;
             }
-            Sentiment sentiment = fromValue(parsedLine[0]);
-            dataSet.incrementDocumentCount(sentiment);
-            for (String key : tokenizer.tokenize(parsedLine[5])) {
-                    dataSet.addTerm(sentiment, key);
-            }
+
+            result.add(new Document(fromValue(parsedLine[0]), parsedLine[5]));
             if (count % 10000 == 0) {
                 LOG.debug("Count {}", count);
             }
         }
         LOG.debug("Count {}", count);
-        return dataSet;
+        return result;
     }
 }
