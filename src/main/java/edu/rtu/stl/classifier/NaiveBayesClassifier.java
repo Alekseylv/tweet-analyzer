@@ -5,12 +5,17 @@ import static java.lang.Math.log;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.rtu.stl.domain.BayesDataSet;
 import edu.rtu.stl.domain.Document;
 import edu.rtu.stl.domain.Sentiment;
 import edu.rtu.stl.parser.Tokenizer;
 
 public abstract class NaiveBayesClassifier implements Classifier<BayesDataSet> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(NaiveBayesClassifier.class);
 
     private final Tokenizer tokenizer;
     BayesDataSet dataSet;
@@ -21,6 +26,8 @@ public abstract class NaiveBayesClassifier implements Classifier<BayesDataSet> {
 
     @Override
     public Result classify(Document document) {
+        LOG.debug("Classifying document " + document.text);
+
         Iterable<String> tokens = tokenizer.tokenize(document.text);
         double[] score = new double[Sentiment.values().length];
 
@@ -32,13 +39,7 @@ public abstract class NaiveBayesClassifier implements Classifier<BayesDataSet> {
             }
         }
 
-        Result max = new Result(Sentiment.values()[0], score[0], document);
-        for (int i = 1; i < Sentiment.values().length; i++) {
-            if (max.score < score[i]) {
-                max = new Result(Sentiment.values()[i], score[i], document);
-            }
-        }
-        return max;
+        return findMax(score, document);
     }
 
     @Override

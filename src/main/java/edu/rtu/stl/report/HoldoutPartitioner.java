@@ -16,6 +16,8 @@ public class HoldoutPartitioner {
         ArrayList<Document> docs = new ArrayList<>(documents);
         Collections.shuffle(docs, random);
 
+        docs = new ArrayList<>(docs.subList(0, 1000));
+
         int partitionPoint = docs.size() * learningSetProportion / 100;
         List<Document> learningSet = docs.subList(0, partitionPoint);
         List<Document> testingSet = docs.subList(partitionPoint, docs.size());
