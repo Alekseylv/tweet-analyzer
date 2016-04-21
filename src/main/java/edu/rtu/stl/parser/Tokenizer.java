@@ -1,7 +1,7 @@
 package edu.rtu.stl.parser;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -13,7 +13,7 @@ public class Tokenizer {
         this.stopWords = stopWords;
     }
 
-    public List<String> tokenize(String line) {
+    public Collection<String> tokenize(String line) {
         return Arrays.stream(line.replaceAll("[^a-zA-Z ]", "").toLowerCase().split("\\s+")).map(String::trim)
                 .filter(x -> !x.isEmpty() && !x.startsWith("@") && !stopWords.contains(x)).collect(Collectors.toList());
     }

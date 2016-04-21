@@ -2,6 +2,7 @@ package edu.rtu.stl.classifier;
 
 import static java.lang.Math.log;
 
+import java.util.Iterator;
 import java.util.List;
 
 import edu.rtu.stl.domain.BayesDataSet;
@@ -21,7 +22,7 @@ public abstract class NaiveBayesClassifier implements Classifier {
 
     @Override
     public Result classify(Document document) {
-        List<String> tokens = tokenizer.tokenize(document.text);
+        Iterable<String> tokens = tokenizer.tokenize(document.text);
         double[] score = new double[Sentiment.values().length];
 
         for (int i = 0; i < Sentiment.values().length; i++) {

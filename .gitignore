@@ -9,3 +9,4 @@ buildNumber.properties
 .mvn/timing.properties
 tweet-analyzer.iml
 src/main/resources/twitter_test_data_big_.csv.zip
+src/main/resources/rt-polarity*

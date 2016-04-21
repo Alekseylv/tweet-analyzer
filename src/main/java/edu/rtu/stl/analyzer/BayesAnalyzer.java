@@ -1,6 +1,5 @@
 package edu.rtu.stl.analyzer;
 
-import java.util.Collection;
 import java.util.List;
 
 import edu.rtu.stl.domain.BayesDataSet;
@@ -27,7 +26,4 @@ public class BayesAnalyzer implements Analyzer {
         return dataSet;
     }
 
-    public Collection<String> tokenize(Document document) {
-        return tokenizer.tokenize(document.text);
-    }
 }
