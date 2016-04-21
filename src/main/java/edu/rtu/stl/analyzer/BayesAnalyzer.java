@@ -6,7 +6,7 @@ import edu.rtu.stl.domain.BayesDataSet;
 import edu.rtu.stl.domain.Document;
 import edu.rtu.stl.parser.Tokenizer;
 
-public class BayesAnalyzer implements Analyzer {
+public class BayesAnalyzer implements Analyzer<BayesDataSet> {
 
     private final Tokenizer tokenizer;
 

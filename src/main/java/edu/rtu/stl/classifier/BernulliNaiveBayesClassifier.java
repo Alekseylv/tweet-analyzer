@@ -8,8 +8,8 @@ import edu.rtu.stl.parser.Tokenizer;
 
 public class BernulliNaiveBayesClassifier extends NaiveBayesClassifier {
 
-    public BernulliNaiveBayesClassifier(BayesDataSet dataSet, Tokenizer tokenizer) {
-        super(dataSet, tokenizer);
+    public BernulliNaiveBayesClassifier(Tokenizer tokenizer) {
+        super(tokenizer);
     }
 
     @Override

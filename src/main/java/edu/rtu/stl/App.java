@@ -59,7 +59,7 @@ public class App {
         );
         HoldoutPartition data = holdoutPartitioner.partition(documents);
 
-        Classifier naiveBayes = new BernulliNaiveBayesClassifier(bayesAnalyzer.analyze(data.learningSet), tokenizer);
+        Classifier naiveBayes = new BernulliNaiveBayesClassifier(tokenizer).trainClassifier(bayesAnalyzer.analyze(data.learningSet));
 
         List<Result> classificationResults = data.testingSet.stream().map(naiveBayes::classify).collect(Collectors.toList());
 

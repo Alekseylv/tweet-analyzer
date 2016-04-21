@@ -4,9 +4,11 @@ import edu.rtu.stl.domain.Document;
 import edu.rtu.stl.domain.DomainObject;
 import edu.rtu.stl.domain.Sentiment;
 
-public interface Classifier {
+public interface Classifier<T> {
 
     Result classify(Document line);
+
+    Classifier<T> trainClassifier(T data);
 
     class Result extends DomainObject {
         public final Sentiment sentiment;

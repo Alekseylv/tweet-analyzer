@@ -8,8 +8,8 @@ import edu.rtu.stl.parser.Tokenizer;
 
 public class MultinomialNaiveBayesClassifier extends NaiveBayesClassifier {
 
-    public MultinomialNaiveBayesClassifier(BayesDataSet dataSet, Tokenizer tokenizer) {
-        super(dataSet, tokenizer);
+    public MultinomialNaiveBayesClassifier(Tokenizer tokenizer) {
+        super(tokenizer);
     }
 
     @Override

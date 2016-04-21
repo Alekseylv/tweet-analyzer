@@ -10,13 +10,12 @@ import edu.rtu.stl.domain.Document;
 import edu.rtu.stl.domain.Sentiment;
 import edu.rtu.stl.parser.Tokenizer;
 
-public abstract class NaiveBayesClassifier implements Classifier {
+public abstract class NaiveBayesClassifier implements Classifier<BayesDataSet> {
 
-    final BayesDataSet dataSet;
-    final Tokenizer tokenizer;
+    private final Tokenizer tokenizer;
+    BayesDataSet dataSet;
 
-    public NaiveBayesClassifier(BayesDataSet dataSet, Tokenizer tokenizer) {
-        this.dataSet = dataSet;
+    public NaiveBayesClassifier(Tokenizer tokenizer) {
         this.tokenizer = tokenizer;
     }
 
@@ -40,6 +39,12 @@ public abstract class NaiveBayesClassifier implements Classifier {
             }
         }
         return max;
+    }
+
+    @Override
+    public NaiveBayesClassifier trainClassifier(BayesDataSet data) {
+        this.dataSet = data;
+        return this;
     }
 
     abstract double incrementScore(Sentiment sentiment, String key);

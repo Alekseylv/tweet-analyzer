@@ -7,6 +7,6 @@ import javax.print.Doc;
 import edu.rtu.stl.domain.DataSet;
 import edu.rtu.stl.domain.Document;
 
-public interface Analyzer {
-    DataSet analyze(List<Document> documents);
+public interface Analyzer<T> {
+    T analyze(List<Document> documents);
 }
