@@ -1,39 +1,44 @@
 # tweet-analyzer
 
-# Naive Bayes articles:
-http://sebastianraschka.com/Articles/2014_naive_bayes_1.html
-http://nlp.stanford.edu/IR-book/pdf/13bayes.pdf
+### Links and used literature:
 
-Weka:
-http://jmgomezhidalgo.blogspot.com.es/2013/06/baseline-sentiment-analysis-with-weka.html
+**Naive Bayes**:
+- Article: http://sebastianraschka.com/Articles/2014_naive_bayes_1.html
+- Book: http://nlp.stanford.edu/IR-book/pdf/13bayes.pdf
 
-Data tweets:
-http://help.sentiment140.com/for-students
+**Weka**:
+- http://jmgomezhidalgo.blogspot.com.es/2013/06/baseline-sentiment-analysis-with-weka.html
+- http://stackoverflow.com/questions/9707825/basic-text-classification-with-weka-in-java
+- https://weka.wikispaces.com/Use+WEKA+in+your+Java+code
 
-Data movies:
-https://www.cs.cornell.edu/people/pabo/movie-review-data/
+**Data**:
+- tweets: http://help.sentiment140.com/for-students
+- movies: https://www.cs.cornell.edu/people/pabo/movie-review-data/
 
-
-# Some Experimentation results
+### Some Experimentation results
 
 Multinomial bayes (Twitter CSV 1000) (time < 1 min):
-
+```
 [sentiment=POSITIVE,precision=58,recall=60]
 [sentiment=NEGATIVE,precision=66,recall=64]
-
+```
 Bernulli bayes (Twitter CSV 1000) (time < 1 min):
-
+```
 [sentiment=POSITIVE,precision=57,recall=71]
 [sentiment=NEGATIVE,precision=70,recall=55]
-
+```
 Weka J48 (Twitter CSV 1000) (time ~ 3 min):
+```
 [sentiment=POSITIVE,precision=58,recall=68]
 [sentiment=NEGATIVE,precision=68,recall=58]
-
-Weka Naive Bayes (Twitter CSV 1000) (time ~ 1 min)
+```
+Weka Naive Bayes (Twitter CSV 1000) (time ~ 1 min):
+```
 [sentiment=POSITIVE,precision=59,recall=57]
 [sentiment=NEGATIVE,precision=65,recall=67]
-
-Weka Naive Bayes without NGrams (Twitter CSV 1000) (time ~ 1 min)
+```
+Weka Naive Bayes without NGrams (Twitter CSV 1000) (time ~ 1 min):
+```
 [sentiment=POSITIVE,precision=62,recall=63]
 [sentiment=NEGATIVE,precision=68,recall=68]
+```
