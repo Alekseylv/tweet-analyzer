@@ -1,6 +1,6 @@
 package edu.rtu.stl.util;
 
-public interface WithExceptionUtil {
+public interface WithException {
 
     default <T> T exceptional(SupplierWithException<T> supplier) {
         try {

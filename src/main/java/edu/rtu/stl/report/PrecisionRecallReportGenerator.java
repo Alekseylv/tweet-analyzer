@@ -1,6 +1,6 @@
 package edu.rtu.stl.report;
 
-import static java.math.BigDecimal.ROUND_DOWN;
+import static java.math.BigDecimal.ROUND_HALF_UP;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,6 +35,6 @@ public class PrecisionRecallReportGenerator {
         if (b == 0) {
             return BigDecimal.ZERO;
         }
-        return new BigDecimal(a).multiply(new BigDecimal(100)).divide(new BigDecimal(b), ROUND_DOWN);
+        return new BigDecimal(a).multiply(new BigDecimal(100)).divide(new BigDecimal(b), ROUND_HALF_UP);
     }
 }

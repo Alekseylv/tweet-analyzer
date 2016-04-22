@@ -5,12 +5,12 @@ import org.slf4j.LoggerFactory;
 
 import edu.rtu.stl.domain.Document;
 import edu.rtu.stl.domain.WekaDataSet;
-import edu.rtu.stl.util.WithExceptionUtil;
-import edu.rtu.stl.util.WithWekaUtil;
+import edu.rtu.stl.util.WithException;
+import edu.rtu.stl.util.WithWeka;
 import weka.core.Instance;
 import weka.core.Instances;
 
-public class WekaClassifier implements Classifier<WekaDataSet>, WithExceptionUtil, WithWekaUtil {
+public class WekaClassifier implements Classifier<WekaDataSet>, WithException, WithWeka {
 
     private static final Logger LOG = LoggerFactory.getLogger(WekaClassifier.class);
 

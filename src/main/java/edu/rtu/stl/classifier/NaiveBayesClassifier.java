@@ -26,7 +26,7 @@ public abstract class NaiveBayesClassifier implements Classifier<BayesDataSet> {
 
     @Override
     public Result classify(Document document) {
-        LOG.debug("Classifying document " + document.text);
+        LOG.debug("Classifying document: " + document.text);
 
         Iterable<String> tokens = tokenizer.tokenize(document.text);
         double[] score = new double[Sentiment.values().length];
