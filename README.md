@@ -1,5 +1,39 @@
 # tweet-analyzer
 
+### Usage
+
+Requires java 1.8
+
+```cli
+mvn clean install
+mvn exec:java
+```
+
+### Configuration
+
+```
+# all relative to src/main/resources/
+stop.word.path=stopwords.txt
+twitter.data.path=twitter_test_data_big_.csv.zip
+imdb.data.path.positive=rt-polarity.pos
+imdb.data.path.negative=rt-polarity.neg
+
+runner.type=STATISTICAL|INTERACTIVE
+loader.type=TWITTER|IMDB
+classification.type=CUSTOM_MULTINOMIAL_BAYES|CUSTOM_BERNULLI_BAYES|WEKA_BAYES|WEKA_J48
+
+#iteration count for statistics
+runner.cross-validation.iteration.count=10
+
+hold.out.training.data.proportion=70
+
+# specify seed to test multiple classifiers on same data
+data.randomize.seed=1
+# limit data so that weka does not take forever to compute
+data.size.limit=10000
+```
+
+
 ### Links and used literature:
 
 **Naive Bayes**:
