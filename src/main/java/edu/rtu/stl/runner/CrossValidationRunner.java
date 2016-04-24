@@ -43,7 +43,7 @@ public class CrossValidationRunner extends Runner implements WithDefaultProperti
 
         LongStream.range(0, getLongProperty("runner.cross-validation.iteration.count", 10)).forEach(i -> {
             HoldoutPartition data = holdoutPartitioner.partition(documents);
-            Classifier classifier = trainClassifier(data.trainingSet);
+            Classifier classifier = conf.trainClassifier(data.trainingSet);
 
             List<Classifier.Result> classificationResults = data.testingSet.stream().map(classifier::classify).collect(Collectors.toList());
 

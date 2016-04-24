@@ -1,8 +1,11 @@
 package edu.rtu.stl.conf;
 
+import java.util.List;
+
 import edu.rtu.stl.analyzer.Analyzer;
 import edu.rtu.stl.classifier.Classifier;
 import edu.rtu.stl.domain.ClassificationType;
+import edu.rtu.stl.domain.Document;
 
 public class ClassificationConfiguration<T> {
 
@@ -16,15 +19,11 @@ public class ClassificationConfiguration<T> {
         this.classifier = classifier;
     }
 
-    public Analyzer<T> getAnalyzer() {
-        return analyzer;
-    }
-
-    public Classifier<T> getClassifier() {
-        return classifier;
-    }
-
     public ClassificationType type() {
         return type;
+    }
+
+    public Classifier<T> trainClassifier(List<Document> documents) {
+        return classifier.trainClassifier(analyzer.analyze(documents));
     }
 }

@@ -16,7 +16,7 @@ public class InteractiveRunner extends Runner {
 
     @Override
     public void run() {
-        Classifier classifier = trainClassifier(loader.getFullData());
+        Classifier classifier = conf.trainClassifier(loader.getFullData());
 
         Scanner scanner = new Scanner(in);
         System.out.println("Enter some text to classify");
