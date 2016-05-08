@@ -24,7 +24,7 @@ public class KnnTfidfClassifier implements Classifier<KnnTfidfDataSet> {
 
     @Override
     public Result classify(Document document) {
-        LOG.debug("Classifying document: " + document.text);
+        LOG.debug("Classifying document: {}", document.text);
 
         TFIDFDocument workDocument = new TFIDFDocument(document);
         tokenizer.tokenize(document.text).forEach(workDocument::addTerm);
