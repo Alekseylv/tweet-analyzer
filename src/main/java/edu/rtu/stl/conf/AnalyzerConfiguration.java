@@ -1,36 +1,18 @@
 package edu.rtu.stl.conf;
 
-import static edu.rtu.stl.domain.LoaderType.IMDB;
-import static edu.rtu.stl.domain.LoaderType.TWITTER;
-import static edu.rtu.stl.domain.Sentiment.NEGATIVE;
-import static edu.rtu.stl.domain.Sentiment.POSITIVE;
-import static java.util.Arrays.asList;
-
-import java.nio.file.Path;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
-
-import org.apache.commons.collections4.ListUtils;
-
 import edu.rtu.stl.analyzer.BayesAnalyzer;
+import edu.rtu.stl.analyzer.KnnTfidfAnalyzer;
 import edu.rtu.stl.analyzer.WekaAnalyzer;
 import edu.rtu.stl.classifier.BernulliNaiveBayesClassifier;
 import edu.rtu.stl.classifier.MultinomialNaiveBayesClassifier;
+import edu.rtu.stl.classifier.KnnTfidfClassifier;
 import edu.rtu.stl.classifier.WekaClassifier;
-import edu.rtu.stl.domain.BayesDataSet;
-import edu.rtu.stl.domain.Document;
-import edu.rtu.stl.domain.ClassificationType;
-import edu.rtu.stl.domain.WekaDataSet;
-import edu.rtu.stl.parser.ImdbReviewParser;
-import edu.rtu.stl.parser.Parser;
-import edu.rtu.stl.parser.Tokenizer;
-import edu.rtu.stl.parser.TwitterCSVParser;
-import edu.rtu.stl.parser.UniqueTokenizer;
+import edu.rtu.stl.domain.*;
+import edu.rtu.stl.parser.*;
 import edu.rtu.stl.runner.Loader;
-import edu.rtu.stl.runner.Runner;
 import edu.rtu.stl.util.WithDefaultProperties;
 import edu.rtu.stl.util.WithFileReading;
+import org.apache.commons.collections4.ListUtils;
 import weka.attributeSelection.InfoGainAttributeEval;
 import weka.attributeSelection.Ranker;
 import weka.classifiers.Classifier;
@@ -43,12 +25,22 @@ import weka.filters.MultiFilter;
 import weka.filters.supervised.attribute.AttributeSelection;
 import weka.filters.unsupervised.attribute.StringToWordVector;
 
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Set;
+
+import static edu.rtu.stl.domain.LoaderType.IMDB;
+import static edu.rtu.stl.domain.LoaderType.TWITTER;
+import static edu.rtu.stl.domain.Sentiment.NEGATIVE;
+import static edu.rtu.stl.domain.Sentiment.POSITIVE;
+import static java.util.Arrays.asList;
+
 public class AnalyzerConfiguration implements WithFileReading, WithDefaultProperties {
 
     private final Set<String> stopWords = readStopWords();
     public final Tokenizer tokenizer = new Tokenizer(stopWords);
     public final UniqueTokenizer uniqueTokenizer = new UniqueTokenizer(stopWords);
-    public final List<ClassificationConfiguration> classificationConfigurations = asList(multinomialBayes(), bernulliBayes(), wekaBayes(), wekaJ48());
+    public final List<ClassificationConfiguration> classificationConfigurations = asList(multinomialBayes(), bernulliBayes(), wekaBayes(), wekaJ48(), tfidf());
     public final List<Loader> loaders = asList(twitterLoader(), imdbLoader());
 
     public ClassificationConfiguration<BayesDataSet> multinomialBayes() {
@@ -62,11 +54,18 @@ public class AnalyzerConfiguration implements WithFileReading, WithDefaultProper
     }
 
     public ClassificationConfiguration<WekaDataSet> wekaBayes() {
-        return new ClassificationConfiguration<>(ClassificationType.WEKA_BAYES, new WekaAnalyzer(), setUpWekaClassifier(new NaiveBayes()));
+        return new ClassificationConfiguration<>(ClassificationType.WEKA_BAYES, new WekaAnalyzer(),
+                setUpWekaClassifier(new NaiveBayes()));
     }
 
     public ClassificationConfiguration<WekaDataSet> wekaJ48() {
-        return new ClassificationConfiguration<>(ClassificationType.WEKA_J48, new WekaAnalyzer(), setUpWekaClassifier(new J48()));
+        return new ClassificationConfiguration<>(ClassificationType.WEKA_J48, new WekaAnalyzer(),
+                setUpWekaClassifier(new J48()));
+    }
+
+    public ClassificationConfiguration<KnnTfidfDataSet> tfidf() {
+        return new ClassificationConfiguration<>(ClassificationType.CUSTOM_KNN_TFIDF, new KnnTfidfAnalyzer(tokenizer),
+                new KnnTfidfClassifier(tokenizer));
     }
 
     public WekaClassifier setUpWekaClassifier(Classifier wekaClassifier) {
@@ -89,7 +88,7 @@ public class AnalyzerConfiguration implements WithFileReading, WithDefaultProper
         filter2.setSearch(searchClass);
 
         MultiFilter multiFilter = new MultiFilter();
-        multiFilter.setFilters(new Filter[] { filter1, filter2 });
+        multiFilter.setFilters(new Filter[]{filter1, filter2});
 
         FilteredClassifier classifier = new FilteredClassifier();
         classifier.setFilter(multiFilter);
