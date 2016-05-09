@@ -21,7 +21,7 @@ public abstract class Loader implements WithFileReading {
         List<Document> documents = getFullData();
         Random random = new Random(getLongProperty("data.randomize.seed", System.currentTimeMillis()));
         Collections.shuffle(documents, random);
-        return documents.subList(0, Math.min(getLongProperty("data.size.limit", Long.MAX_VALUE).intValue(), documents.size()));
+        return documents.subList(0, Math.min(getLongProperty("data.size.limit", Integer.MAX_VALUE).intValue(), documents.size()));
     }
 
 
