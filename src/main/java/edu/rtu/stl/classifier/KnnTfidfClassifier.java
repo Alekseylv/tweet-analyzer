@@ -4,13 +4,14 @@ import edu.rtu.stl.domain.Document;
 import edu.rtu.stl.domain.KnnTfidfDataSet;
 import edu.rtu.stl.domain.TFIDFDocument;
 import edu.rtu.stl.parser.Tokenizer;
+import edu.rtu.stl.util.WithDefaultProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Created by Mordavolt.
  */
-public class KnnTfidfClassifier implements Classifier<KnnTfidfDataSet> {
+public class KnnTfidfClassifier implements Classifier<KnnTfidfDataSet>, WithDefaultProperties{
 
     private static final Logger LOG = LoggerFactory.getLogger(KnnTfidfClassifier.class);
 
@@ -30,7 +31,8 @@ public class KnnTfidfClassifier implements Classifier<KnnTfidfDataSet> {
         tokenizer.tokenize(document.text).forEach(workDocument::addTerm);
         dataSet.calculateTFIDFValue(workDocument);
 
-        return dataSet.calculateKNNSentiment(workDocument, 7);
+        Integer kValue = getIntegerProperty("knn.k.value", 3);
+        return dataSet.calculateKNNSentiment(workDocument, kValue);
     }
 
     @Override
