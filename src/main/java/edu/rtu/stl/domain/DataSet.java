@@ -52,6 +52,19 @@ public class DataSet {
         sentiments[sentiment.ordinal()].documentCount++;
     }
 
+    public Sentiment getMostCommonSentiment() {
+        Integer maxFrequency = 0;
+        Sentiment maxSentiment = Sentiment.values()[0];
+
+        for (int i = 0; i < Sentiment.values().length; i++) {
+            if (sentiments[i].documentCount > maxFrequency) {
+                maxFrequency = sentiments[i].documentCount;
+                maxSentiment = Sentiment.values()[i];
+            }
+        }
+        return maxSentiment;
+    }
+
     private void addTerm(SentimentFrequency sentimentFrequency, String key) {
         sentimentFrequency.frequencies.put(key, sentimentFrequency.frequencies.getOrDefault(key, 0) + 1);
         sentimentFrequency.termCount++;

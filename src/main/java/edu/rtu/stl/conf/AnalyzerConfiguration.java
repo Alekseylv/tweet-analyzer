@@ -1,12 +1,10 @@
 package edu.rtu.stl.conf;
 
+import edu.rtu.stl.analyzer.BaseLineAnalyzer;
 import edu.rtu.stl.analyzer.BayesAnalyzer;
 import edu.rtu.stl.analyzer.KnnTfidfAnalyzer;
 import edu.rtu.stl.analyzer.WekaAnalyzer;
-import edu.rtu.stl.classifier.BernulliNaiveBayesClassifier;
-import edu.rtu.stl.classifier.MultinomialNaiveBayesClassifier;
-import edu.rtu.stl.classifier.KnnTfidfClassifier;
-import edu.rtu.stl.classifier.WekaClassifier;
+import edu.rtu.stl.classifier.*;
 import edu.rtu.stl.domain.*;
 import edu.rtu.stl.parser.*;
 import edu.rtu.stl.runner.Loader;
@@ -40,7 +38,7 @@ public class AnalyzerConfiguration implements WithFileReading, WithDefaultProper
     private final Set<String> stopWords = readStopWords();
     public final Tokenizer tokenizer = new Tokenizer(stopWords);
     public final UniqueTokenizer uniqueTokenizer = new UniqueTokenizer(stopWords);
-    public final List<ClassificationConfiguration> classificationConfigurations = asList(multinomialBayes(), bernulliBayes(), wekaBayes(), wekaJ48(), tfidf());
+    public final List<ClassificationConfiguration> classificationConfigurations = asList(multinomialBayes(), bernulliBayes(), wekaBayes(), wekaJ48(), tfidf(), baseline());
     public final List<Loader> loaders = asList(twitterLoader(), imdbLoader());
 
     public ClassificationConfiguration<BayesDataSet> multinomialBayes() {
@@ -66,6 +64,11 @@ public class AnalyzerConfiguration implements WithFileReading, WithDefaultProper
     public ClassificationConfiguration<KnnTfidfDataSet> tfidf() {
         return new ClassificationConfiguration<>(ClassificationType.CUSTOM_KNN_TFIDF, new KnnTfidfAnalyzer(tokenizer),
                 new KnnTfidfClassifier(tokenizer));
+    }
+
+    public ClassificationConfiguration<BaselineDataSet> baseline() {
+        return new ClassificationConfiguration<>(ClassificationType.BASELINE, new BaseLineAnalyzer(),
+                new BaselineClassifier());
     }
 
     public WekaClassifier setUpWekaClassifier(Classifier wekaClassifier) {
