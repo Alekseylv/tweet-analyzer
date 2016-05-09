@@ -13,7 +13,7 @@ public class BaselineDataSet extends DataSet {
 
         for (int i = 0; i < Sentiment.values().length; i++) {
             total += getDocumentCount(Sentiment.values()[i]);
-            if (total <= index) {
+            if (total >= index) {
                 return Sentiment.values()[i];
             }
         }
